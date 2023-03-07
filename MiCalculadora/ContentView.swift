@@ -6,6 +6,15 @@ struct ContentView: View {
     @State var numero2 : Int = 0
     @State var total = 0
     
+    enum Operacion{
+        case suma
+        case resta
+        case multiplicacion
+        case division
+    }
+    
+    @State var operacion : Operacion = .suma
+    
     var body: some View {
             VStack(){
                 Text("Calculadora")
@@ -30,10 +39,16 @@ struct ContentView: View {
                     .foregroundColor(.black)
                     .font(.headline)
                     .keyboardType(.numberPad)
+                Picker("Operación", selection: $operacion){
+                    Text("Suma").tag(Operacion.suma)
+                    Text("Resta").tag(Operacion.resta)
+                    Text("Multiplicación").tag(Operacion.multiplicacion)
+                    Text("División").tag(Operacion.division)
+                }.pickerStyle(.menu)
                 Button(action: {
-                    sumar()
+                    realizarOperacion()
                 }, label: {
-                    Text("Sumar".uppercased())
+                    Text("Calcular".uppercased())
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(Color.blue.cornerRadius(10))
@@ -50,9 +65,13 @@ struct ContentView: View {
             }.padding()
     }
     
-    func sumar(){
-        total = numero1 + numero2
-        print(total)
+    func realizarOperacion(){
+        switch(operacion){
+        case .suma : total = numero1 + numero2
+        case .resta : total = numero1 - numero2
+        case .multiplicacion : total = numero1 * numero2
+        default : total = numero1 / numero2
+        }
     }
 }
 
